@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>UNKNOWN NUMBER</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+    user-select: none;
+}
+
+#game {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* PHONE */
+
+.phone {
+    width: min(100vw, 430px);
+    height: min(100vh, 860px);
+    background: #08090c;
+    position: relative;
+    overflow: hidden;
+}
+
+/* TOP STATUS BAR */
+
+.status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 18px;
+    font-size: 13px;
+    z-index: 50;
+}
+
+/* HOME */
+
+.home {
+    width: 100%;
+    height: 100%;
+    padding: 75px 20px 30px;
+    background:
+        linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.8)),
+        radial-gradient(circle at 50% 30%, #23333b, #07090c 65%);
+}
+
+.clock {
+    text-align: center;
+    font-size: 58px;
+    font-weight: 200;
+    margin-bottom: 10px;
+}
+
+.date {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+.notification {
+    background: rgba(40,40,45,.9);
+    border-radius: 18px;
+    padding: 15px;
+    margin-bottom: 30px;
+    cursor: pointer;
+    border: 1px solid #333;
+}
+
+.notification small {
+    color: #aaa;
+}
+
+.notification strong {
+    display: block;
+    margin: 5px 0;
+}
+
+.apps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px 15px;
+}
+
+.app {
+    text-align: center;
+    cursor: pointer;
+}
+
+.app-icon {
+    width: 58px;
+    height: 58px;
+    margin: auto;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    background: #202125;
+    box-shadow: 0 5px 15px #000;
+}
+
+.app-name {
+    margin-top: 7px;
+    font-size: 12px;
+}
+
+/* APP */
+
+.app-screen {
+    position: absolute;
+    inset: 0;
+    background: #090a0d;
+    z-index: 20;
+    display: none;
+    padding-top: 45px;
+}
+
+.app-screen.active {
+    display: block;
+}
+
+.app-header {
+    height: 55px;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    border-bottom: 1px solid #222;
+}
+
+.back {
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.app-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* MESSAGES */
+
+.messages {
+    padding: 20px;
+    height: calc(100% - 100px);
+    overflow-y: auto;
+}
+
+.message {
+    max-width: 78%;
+    padding: 12px 15px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.incoming {
+    background: #24252a;
+    margin-right: auto;
+}
+
+.outgoing {
+    background: #1769ff;
+    margin-left: auto;
+}
+
+.choice-area {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    display: grid;
+    gap: 8px;
+}
+
+.choice {
+    border: 1px solid #444;
+    background: #17181c;
+    color: white;
+    padding: 13px;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.choice:active {
+    background: #303138;
+}
+
+/* CALL */
+
+.call-screen {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle, #202b32, #050608 70%);
+    z-index: 60;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.call-screen.active {
+    display: flex;
+}
+
+.caller-icon {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #18191d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 55px;
+    margin-bottom: 25px;
+    border: 1px solid #444;
+}
+
+.caller-name {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.call-status {
+    color: #999;
+}
+
+.call-buttons {
+    position: absolute;
+    bottom: 70px;
+    display: flex;
+    gap: 50px;
+}
+
+.call-button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.decline {
+    background: #e53935;
+}
+
+.answer {
+    background: #28a745;
+}
+
+/* CAMERA */
+
+.camera {
+    height: 100%;
+    background:
+        radial-gradient(circle at 50% 40%, #333, #070707 65%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 50px;
+}
+
+.camera-warning {
+    position: absolute;
+    top: 100px;
+    text-align: center;
+    color: #ff5555;
+    display: none;
+    font-size: 18px;
+}
+
+/* GALLERY */
+
+.gallery-grid {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.photo {
+    height: 110px;
+    background:
+        linear-gradient(135deg, #111, #38444a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    border-radius: 8px;
+}
+
+/* NOTES */
+
+.note {
+    margin: 20px;
+    background: #17181c;
+    border-radius: 15px;
+    padding: 20px;
+    line-height: 1.7;
+}
+
+/* LOCKED */
+
+.locked {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.lock-icon {
+    font-size: 70px;
+    margin-bottom: 20px;
+}
+
+.password {
+    background: #15161a;
+    border: 1px solid #444;
+    padding: 12px;
+    color: white;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* GLITCH */
+
+.glitch {
+    animation: glitch .12s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    25% { transform: translate(3px, -2px); }
+    50% { transform: translate(-3px, 2px); }
+    75% { transform: translate(2px, 1px); }
+    100% { transform: translate(0); }
+}
+
+/* STORY */
+
+.story-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.93);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+}
+
+.story-overlay.active {
+    display: flex;
+}
+
+.story-title {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.story-text {
+    font-size: 23px;
+    line-height: 1.5;
+}
+
+.story-button {
+    margin-top: 30px;
+    background: white;
+    color: black;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+}
+
+/* TOAST */
+
+.toast {
+    position: absolute;
+    top: 55px;
+    left: 15px;
+    right: 15px;
+    background: #24252a;
+    padding: 15px;
+    border-radius: 15px;
+    z-index: 200;
+    transform: translateY(-150px);
+    transition: .4s;
+}
+
+.toast.show {
+    transform: translateY(0);
+}
+
+/* ENDING */
+
+.ending {
+    position: absolute;
+    inset: 0;
+    background: black;
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
+    text-align: center;
+}
+
+.ending.active {
+    display: flex;
+}
+
+.ending h1 {
+    font-size: 35px;
+    letter-spacing: 3px;
+}
+
+.ending p {
+    color: #aaa;
+    line-height: 1.6;
+}
+
+.restart {
+    margin-top: 25px;
+    padding: 15px 30px;
+    border: 1px solid #555;
+    border-radius: 12px;
+    background: #151515;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<div class="phone">
+
+    <!-- STATUS -->
+    <div class="status">
+        <span id="statusTime">2:14 AM</span>
+        <span>● Wi-Fi　🔋 87%</span>
+    </div>
+
+    <!-- HOME SCREEN -->
+    <div class="home" id="home">
+
+        <div class="clock" id="clock">2:14</div>
+        <div class="date">Sunday, April 17</div>
+
+        <div class="notification" onclick="openMessages()">
+            <small>MESSAGES • now</small>
+            <strong>UNKNOWN NUMBER</strong>
+            <div>Are you alone?</div>
+        </div>
+
+        <div class="apps">
+
+            <div class="app" onclick="openMessages()">
+                <div class="app-icon">💬</div>
+                <div class="app-name">Messages</div>
+            </div>
+
+            <div class="app" onclick="openPhone()">
+                <div class="app-icon">📞</div>
+                <div class="app-name">Phone</div>
+            </div>
+
+            <div class="app" onclick="openCamera()">
+                <div class="app-icon">📷</div>
+                <div class="app-name">Camera</div>
+            </div>
+
+            <div class="app" onclick="openGallery()">
+                <div class="app-icon">🖼️</div>
+                <div class="app-name">Gallery</div>
+            </div>
+
+            <div class="app" onclick="openNotes()">
+                <div class="app-icon">📝</div>
+                <div class="app-name">Notes</div>
+            </div>
+
+            <div class="app" onclick="openMaps()">
+                <div class="app-icon">🗺️</div>
+                <div class="app-name">Maps</div>
+            </div>
+
+            <div class="app">
+                <div class="app-icon">⚙️</div>
+                <div class="app-name">Settings</div>
+            </div>
+
+            <div class="app" onclick="openLocked()">
+                <div class="app-icon">🔒</div>
+                <div class="app-name">Locked</div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- MESSAGES -->
+    <div class="app-screen" id="messages">
+
+        <div class="app-header">
+            <div class="back" onclick="closeApps()">‹</div>
+            <div class="app-title">UNKNOWN NUMBER</div>
+        </div>
+
+        <div class="messages" id="messageList">
+
+            <div class="message incoming">
+                Are you alone?
+            </div>
+
+        </div>
+
+        <div class="choice-area" id="choices">
+
+            <button class="choice" onclick="reply('YES')">
+                Yes
+            </button>
+
+            <button class="choice" onclick="reply('NO')">
+                No
+            </button>
+
+            <button class="choice" onclick="reply('IGNORE')">
+                Ignore
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PHONE CALL -->
+    <div class="call-screen" id="callScreen">
+
+        <div class="caller-icon">?</div>
+
+        <div class="caller-name">
+            UNKNOWN NUMBER
+        </div>
+
+        <div class="call-status" id="callStatus">
+            Incoming Call
+        </div>
+
+        <div class="call-buttons">
+
+            <button class="call-button decline"
+                    onclick="declineCall()">
+                ☎
+            </button>
+
+            <button class="call-button answer"
+                    onclick="answerCall()">
+                ☎
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- CAMERA -->
+    <div class="app-screen" id="camera">
+
+        <div class="camera">
+
+            <div class="camera-warning" id="cameraWarning">
+                Something is behind you.
+            </div>
+
+            <div style="font-size:70px;">📷</div>
+
+            <button class="story-button"
+                    onclick="takePhoto()">
+                TAKE PHOTO
+            </button>
+
+            <div class="back"
+                 style="position:absolute;top:50px;left:20px;"
+                 onclick="closeApps()">
+                ‹
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- GALLERY -->
+    <div class="app-screen" id="gallery">
+
+        <div class="app-header">
+            <div class="back" onclick="closeApps()">‹</div>
+            <div class="app-title">Gallery</div>
+        </div>
+
+        <div class="gallery-grid">
+
+            <div class="photo">🌲</div>
+            <div class="photo">🌙</div>
+            <div class="photo">🏠</div>
+            <div class="photo">👤</div>
+            <div class="photo">❓</div>
+            <div class="photo">📷</div>
+
+        </div>
+
+    </div>
+
+
+    <!-- NOTES -->
+    <div class="app-screen" id="notes">
+
+        <div class="app-header">
+            <div class="back" onclick="closeApps()">‹</div>
+            <div class="app-title">Notes</div>
+        </div>
+
+        <div class="note">
+
+            <h3>Don't forget</h3>
+
+            <p>
+                If you're reading this,
+                you already ignored me once.
+            </p>
+
+            <p>
+                Don't make the same mistake again.
+            </p>
+
+            <p style="text-align:right;">
+                — You
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAPS -->
+    <div class="app-screen" id="maps">
+
+        <div class="app-header">
+            <div class="back" onclick="closeApps()">‹</div>
+            <div class="app-title">Maps</div>
+        </div>
+
+        <div style="
+            height:80%;
+            margin:20px;
+            border-radius:15px;
+            background:
+            linear-gradient(45deg,#10151a 25%,#18252a 25%,#18252a 50%,#10151a 50%);
+            background-size:30px 30px;
+            position:relative;
+        ">
+
+            <div style="
+                position:absolute;
+                top:45%;
+                left:50%;
+                font-size:40px;
+            ">
+                📍
+            </div>
+
+        </div>
+
+        <div style="text-align:center;">
+            <b>Someone wants you here.</b>
+        </div>
+
+    </div>
+
+
+    <!-- LOCKED -->
+    <div class="app-screen" id="locked">
+
+        <div class="locked">
+
+            <div class="lock-icon">🔒</div>
+
+            <h2>This app is locked</h2>
+
+            <p style="color:#777;">
+                Enter password
+            </p>
+
+            <input
+                id="password"
+                class="password"
+                maxlength="4"
+                placeholder="0000"
+                type="password"
+            >
+
+            <button class="story-button"
+                    onclick="unlock()">
+                UNLOCK
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STORY OVERLAY -->
+    <div class="story-overlay" id="story">
+
+        <div class="story-title">
+            UNKNOWN NUMBER
+        </div>
+
+        <div class="story-text" id="storyText"></div>
+
+        <button class="story-button"
+                onclick="continueStory()">
+            CONTINUE
+        </button>
+
+    </div>
+
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <strong>UNKNOWN NUMBER</strong>
+        <div id="toastText"></div>
+    </div>
+
+
+    <!-- ENDING -->
+    <div class="ending" id="ending">
+
+        <h1>NOW YOU UNDERSTAND.</h1>
+
+        <p>
+            The phone goes silent.
+        </p>
+
+        <p>
+            Then it rings again.
+        </p>
+
+        <h2>UNKNOWN NUMBER</h2>
+
+        <button class="restart"
+                onclick="location.reload()">
+            PLAY AGAIN
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let storyStep = 0;
+let playerChoice = "";
+let answered = false;
+
+
+/* CLOCK */
+
+function updateClock() {
+
+    const times = [
+        "2:14",
+        "2:15",
+        "2:16",
+        "2:17",
+        "2:18",
+        "2:19",
+        "2:20",
+        "2:21",
+        "2:22",
+        "2:23"
+    ];
+
+    const index = Math.min(
+        Math.floor(storyStep / 2),
+        times.length - 1
+    );
+
+    document.getElementById("clock").textContent =
+        times[index];
+
+    document.getElementById("statusTime").textContent =
+        times[index] + " AM";
+}
+
+
+/* OPEN APPS */
+
+function hideApps() {
+
+    document.querySelectorAll(".app-screen")
+        .forEach(app => app.classList.remove("active"));
+
+}
+
+function openMessages() {
+    hideApps();
+    document.getElementById("messages")
+        .classList.add("active");
+}
+
+function openPhone() {
+
+    hideApps();
+
+    setTimeout(() => {
+
+        document.getElementById("callScreen")
+            .classList.add("active");
+
+    }, 300);
+}
+
+function openCamera() {
+    hideApps();
+    document.getElementById("camera")
+        .classList.add("active");
+}
+
+function openGallery() {
+    hideApps();
+    document.getElementById("gallery")
+        .classList.add("active");
+}
+
+function openNotes() {
+    hideApps();
+    document.getElementById("notes")
+        .classList.add("active");
+}
+
+function openMaps() {
+    hideApps();
+    document.getElementById("maps")
+        .classList.add("active");
+}
+
+function openLocked() {
+    hideApps();
+    document.getElementById("locked")
+        .classList.add("active");
+}
+
+function closeApps() {
+    hideApps();
+}
+
+
+/* MESSAGE REPLY */
+
+function reply(choice) {
+
+    playerChoice = choice;
+
+    const list =
+        document.getElementById("messageList");
+
+    const outgoing =
+        document.createElement("div");
+
+    outgoing.className =
+        "message outgoing";
+
+    outgoing.textContent =
+        choice === "YES"
+        ? "Yes."
+        : choice === "NO"
+        ? "No."
+        : "I'm ignoring this.";
+
+    list.appendChild(outgoing);
+
+    document.getElementById("choices").style.display =
+        "none";
+
+    setTimeout(() => {
+
+        if (choice === "YES") {
+
+            addMessage(
+                "Good. Then listen carefully."
+            );
+
+            setTimeout(() => {
+
+                addMessage(
+                    "In ten seconds, your phone will ring."
+                );
+
+                startPrediction();
+
+            }, 1500);
+
+        }
+
+        else if (choice === "NO") {
+
+            addMessage(
+                "You're lying."
+            );
+
+            setTimeout(() => {
+
+                addMessage(
+                    "But that's okay. I'm still here."
+                );
+
+                triggerCall();
+
+            }, 1500);
+
+        }
+
+        else {
+
+            addMessage(
+                "You always do that."
+            );
+
+            setTimeout(() => {
+
+                addMessage(
+                    "You think ignoring me changes anything?"
+                );
+
+                triggerCall();
+
+            }, 1500);
+
+        }
+
+    }, 800);
+}
+
+
+/* ADD MESSAGE */
+
+function addMessage(text) {
+
+    const list =
+        document.getElementById("messageList");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message incoming";
+
+    message.textContent =
+        text;
+
+    list.appendChild(message);
+
+    list.scrollTop =
+        list.scrollHeight;
+}
+
+
+/* PREDICTION */
+
+function startPrediction() {
+
+    let seconds = 10;
+
+    const interval =
+        setInterval(() => {
+
+            seconds--;
+
+            if (seconds <= 0) {
+
+                clearInterval(interval);
+
+                triggerCall();
+
+            }
+
+        }, 1000);
+}
+
+
+/* INCOMING CALL */
+
+function triggerCall() {
+
+    document.getElementById("callScreen")
+        .classList.add("active");
+
+    document.getElementById("callStatus")
+        .textContent =
+        "Incoming Call";
+
+    if (navigator.vibrate) {
+        navigator.vibrate([
+            300,
+            200,
+            300,
+            200,
+            500
+        ]);
+    }
+}
+
+
+/* ANSWER */
+
+function answerCall() {
+
+    answered = true;
+
+    document.getElementById("callStatus")
+        .textContent =
+        "00:01";
+
+    if (navigator.vibrate) {
+        navigator.vibrate(100);
+    }
+
+    setTimeout(() => {
+
+        document.getElementById("callStatus")
+            .textContent =
+            "00:05";
+
+    }, 4000);
+
+    setTimeout(() => {
+
+        document.getElementById("callStatus")
+            .textContent =
+            "00:10";
+
+        document.getElementById("callScreen")
+            .classList.remove("active");
+
+        showStory(
+            "I told you the phone would ring."
+        );
+
+    }, 9000);
+}
+
+
+/* DECLINE */
+
+function declineCall() {
+
+    document.getElementById("callScreen")
+        .classList.remove("active");
+
+    showStory(
+        "You declined my call."
+    );
+}
+
+
+/* STORY */
+
+function showStory(text) {
+
+    document.getElementById("storyText")
+        .textContent = text;
+
+    document.getElementById("story")
+        .classList.add("active");
+
+}
+
+function continueStory() {
+
+    document.getElementById("story")
+        .classList.remove("active");
+
+    storyStep++;
+
+    updateClock();
+
+    if (storyStep === 1) {
+
+        showToast(
+            "Open the Gallery."
+        );
+
+    }
+
+    else if (storyStep === 2) {
+
+        showToast(
+            "There's something you need to see."
+        );
+
+    }
+
+    else if (storyStep === 3) {
+
+        triggerGlitch();
+
+    }
+
+    else if (storyStep >= 4) {
+
+        setTimeout(() => {
+
+            document.getElementById("ending")
+                .classList.add("active");
+
+        }, 2000);
+
+    }
+}
+
+
+/* CAMERA */
+
+function takePhoto() {
+
+    const warning =
+        document.getElementById("cameraWarning");
+
+    warning.style.display =
+        "block";
+
+    if (navigator.vibrate) {
+        navigator.vibrate(500);
+    }
+
+    setTimeout(() => {
+
+        warning.textContent =
+            "There was someone behind you.";
+
+    }, 1500);
+
+}
+
+
+/* UNLOCK */
+
+function unlock() {
+
+    const password =
+        document.getElementById("password").value;
+
+    if (password === "0417") {
+
+        showStory(
+            "You shouldn't have opened this."
+        );
+
+    }
+
+    else {
+
+        showToast(
+            "Incorrect password."
+        );
+
+    }
+
+}
+
+
+/* TOAST */
+
+function showToast(text) {
+
+    const toast =
+        document.getElementById("toast");
+
+    document.getElementById("toastText")
+        .textContent = text;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 4000);
+}
+
+
+/* GLITCH */
+
+function triggerGlitch() {
+
+    const phone =
+        document.querySelector(".phone");
+
+    phone.classList.add("glitch");
+
+    if (navigator.vibrate) {
+        navigator.vibrate([
+            100,
+            50,
+            100,
+            50,
+            300
+        ]);
+    }
+
+    setTimeout(() => {
+
+        phone.classList.remove("glitch");
+
+        showStory(
+            "How did you know I would do that?"
+        );
+
+    }, 1500);
+}
+
+
+/* INITIAL STORY */
+
+setTimeout(() => {
+
+    showToast(
+        "UNKNOWN NUMBER: Are you alone?"
+    );
+
+}, 1500);
+
+updateClock();
+
+</script>
+
+</body>
+</html>
